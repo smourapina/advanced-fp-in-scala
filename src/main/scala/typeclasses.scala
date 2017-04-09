@@ -43,6 +43,11 @@ object Misc {
     def pure[A](a: A): F[A]
   }
 
+  trait Monad[F[_]] extends Apply[F] {
+    def join[A](ffa: F[F[A]]): F[A]
+    def bind[A, B](fa: F[A])(f: A => F[B]): F[B] = join(map(fa)(f))
+  }
+
   trait Partitionable[F[_]] {
     //there are many ways in which this can go worng
     //def partition[A](fa: F[A], p: A => Boolean): (F[A], F[A])
